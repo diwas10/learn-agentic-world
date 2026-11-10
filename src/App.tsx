@@ -9,6 +9,7 @@ import { MediaSection } from './components/MediaSection';
 import { QuizSection } from './components/QuizSection';
 import { LearnerProfileModal } from './components/LearnerProfileModal';
 import { SearchModal } from './components/SearchModal';
+import { MathHtmlRenderer } from './components/MathHtmlRenderer';
 import {
   BookOpen,
   Box,
@@ -314,11 +315,8 @@ export const App: React.FC = () => {
                       </p>
                     </div>
 
-                    {/* 1. Deep Textbook HTML Content */}
-                    <div
-                      className="lesson-html-container"
-                      dangerouslySetInnerHTML={{ __html: currentLesson.htmlContent }}
-                    />
+                    {/* 1. Deep Textbook HTML Content with Native KaTeX Math */}
+                    <MathHtmlRenderer htmlContent={currentLesson.htmlContent} />
                   </div>
 
                   {/* 2. Inline Interactive 3D WebGL & 2D DAG Studio */}
