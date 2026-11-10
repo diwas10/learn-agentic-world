@@ -56,6 +56,7 @@ export const ThreeJsVisualizer: React.FC<ThreeJsVisualizerProps> = ({ spec }) =>
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.domElement.style.touchAction = 'none';
     currentMount.replaceChildren(renderer.domElement);
 
     // 3. Grid & Lights
@@ -150,16 +151,21 @@ export const ThreeJsVisualizer: React.FC<ThreeJsVisualizerProps> = ({ spec }) =>
     });
     scene.add(edgeGroup);
 
-    // 6. Camera Orbit Controls (Pointer-based)
+    // 6. Camera Orbit Controls (Pointer-based with robust touch capture)
     let isDragging = false;
     let prevMouseX = 0;
     let prevMouseY = 0;
     let spherical = new THREE.Spherical().setFromVector3(camera.position);
 
+    const dom = renderer.domElement;
+
     const onPointerDown = (e: PointerEvent) => {
       isDragging = true;
       prevMouseX = e.clientX;
       prevMouseY = e.clientY;
+      try {
+        dom.setPointerCapture(e.pointerId);
+      } catch {}
     };
 
     const onPointerMove = (e: PointerEvent) => {
@@ -175,8 +181,13 @@ export const ThreeJsVisualizer: React.FC<ThreeJsVisualizerProps> = ({ spec }) =>
       camera.lookAt(0, 0, 0);
     };
 
-    const onPointerUp = () => {
+    const onPointerUp = (e?: PointerEvent) => {
       isDragging = false;
+      if (e) {
+        try {
+          dom.releasePointerCapture(e.pointerId);
+        } catch {}
+      }
     };
 
     const onWheel = (e: WheelEvent) => {
@@ -208,10 +219,10 @@ export const ThreeJsVisualizer: React.FC<ThreeJsVisualizerProps> = ({ spec }) =>
       }
     };
 
-    const dom = renderer.domElement;
     dom.addEventListener('pointerdown', onPointerDown);
     window.addEventListener('pointermove', onPointerMove);
     window.addEventListener('pointerup', onPointerUp);
+    window.addEventListener('pointercancel', onPointerUp);
     dom.addEventListener('wheel', onWheel, { passive: false });
     dom.addEventListener('click', onClick);
 
@@ -267,31 +278,31 @@ export const ThreeJsVisualizer: React.FC<ThreeJsVisualizerProps> = ({ spec }) =>
   return (
     <div className="flex flex-col h-full bg-slate-950/80 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl relative">
       {/* 3D Scene Header Bar */}
-      <div className="flex items-center justify-between px-5 py-3.5 bg-slate-900/90 border-b border-slate-800/80 backdrop-blur z-10">
+      <div className="flex items-center justify-between px-3 sm:px-5 py-2.5 sm:py-3.5 bg-slate-900/90 border-b border-slate-800/80 backdrop-blur z-10">
         <div>
-          <div className="flex items-center space-x-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-pulse"></span>
-            <h3 className="text-sm font-semibold text-white tracking-wide">{spec.sceneTitle}</h3>
-            <span className="text-[10px] font-mono uppercase bg-sky-500/10 text-sky-400 border border-sky-500/20 px-2 py-0.5 rounded">
+          <div className="flex items-center space-x-2 sm:space-x-2.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-sky-400 animate-pulse flex-shrink-0"></span>
+            <h3 className="text-xs sm:text-sm font-semibold text-white tracking-wide">{spec.sceneTitle}</h3>
+            <span className="text-[9px] sm:text-[10px] font-mono uppercase bg-sky-500/10 text-sky-400 border border-sky-500/20 px-1.5 sm:px-2 py-0.5 rounded">
               WebGL 3D
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-0.5">{spec.description}</p>
+          <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5 line-clamp-1">{spec.description}</p>
         </div>
-        <div className="flex items-center space-x-2 text-xs font-mono text-slate-400">
+        <div className="flex items-center space-x-2 text-xs font-mono text-slate-400 flex-shrink-0">
           <span className="hidden sm:inline">Drag to Orbit • Scroll to Zoom</span>
         </div>
       </div>
 
       {/* Main Canvas Area */}
-      <div className="relative flex-1 min-h-[460px] w-full" ref={mountRef}>
+      <div className="relative flex-1 min-h-[240px] sm:min-h-[340px] lg:min-h-[440px] w-full" ref={mountRef}>
         {/* Clicked Node Detail Card Overlay */}
         {selectedNode && (
-          <div className="absolute top-4 left-4 z-20 w-80 bg-slate-900/95 border border-sky-500/40 rounded-xl p-4 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 duration-150">
+          <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-20 w-[calc(100%-1.5rem)] sm:w-80 max-w-xs bg-slate-900/95 border border-sky-500/40 rounded-xl p-3 sm:p-4 shadow-2xl backdrop-blur-md animate-in fade-in zoom-in-95 duration-150">
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-2">
                 <span className="w-3 h-3 rounded-full" style={{ backgroundColor: selectedNode.color }}></span>
-                <h4 className="text-sm font-bold text-white">{selectedNode.label}</h4>
+                <h4 className="text-xs sm:text-sm font-bold text-white">{selectedNode.label}</h4>
               </div>
               <button
                 onClick={() => setSelectedNode(null)}
@@ -300,12 +311,12 @@ export const ThreeJsVisualizer: React.FC<ThreeJsVisualizerProps> = ({ spec }) =>
                 ✕
               </button>
             </div>
-            <div className="mt-2 text-xs text-slate-300 font-mono">
+            <div className="mt-2 text-[11px] sm:text-xs text-slate-300 font-mono">
               <div className="text-slate-400">Type: <span className="text-sky-300">{selectedNode.type}</span></div>
               <div className="text-slate-400">Position: [{selectedNode.position.join(', ')}]</div>
               {selectedNode.metrics && (
                 <div className="mt-2 pt-2 border-t border-slate-800 space-y-1">
-                  <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Telemetry Metrics</div>
+                  <div className="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Telemetry Metrics</div>
                   {Object.entries(selectedNode.metrics).map(([k, v]) => (
                     <div key={k} className="flex justify-between text-slate-300">
                       <span>{k}:</span>
@@ -321,14 +332,14 @@ export const ThreeJsVisualizer: React.FC<ThreeJsVisualizerProps> = ({ spec }) =>
 
       {/* Interactive Controls Bar at Bottom */}
       {spec.interactiveControls.length > 0 && (
-        <div className="p-4 bg-slate-900/95 border-t border-slate-800 z-10">
-          <div className="flex items-center space-x-2 text-xs font-semibold text-sky-400 mb-3 uppercase tracking-wider">
-            <Sliders className="w-3.5 h-3.5" />
-            <span>Interactive Hyper-Parameter & Topology Controls</span>
+        <div className="p-3 sm:p-4 bg-slate-900/95 border-t border-slate-800 z-10 max-h-52 sm:max-h-none overflow-y-auto">
+          <div className="flex items-center space-x-2 text-xs font-semibold text-sky-400 mb-2.5 uppercase tracking-wider">
+            <Sliders className="w-3.5 h-3.5 flex-shrink-0" />
+            <span>Interactive Topology &amp; Hyper-Parameters</span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-4">
             {spec.interactiveControls.map((ctrl) => (
-              <div key={ctrl.name} className="bg-slate-950/80 border border-slate-800/90 rounded-lg p-3">
+              <div key={ctrl.name} className="bg-slate-950/80 border border-slate-800/90 rounded-lg p-2.5 sm:p-3">
                 <div className="flex justify-between items-center mb-1.5">
                   <span className="text-xs text-slate-300 font-medium">{ctrl.label}</span>
                   <span className="text-xs font-mono text-sky-400 font-bold">

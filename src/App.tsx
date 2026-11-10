@@ -33,6 +33,7 @@ export const App: React.FC = () => {
   const [selectedLessonIndex, setSelectedLessonIndex] = useState(0);
   const [activeTab, setActiveTab] = useState<ViewMode>('masterclass-flow');
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -136,11 +137,13 @@ export const App: React.FC = () => {
         totalCount={totalLessonsCount}
         onOpenProfile={() => setProfileOpen(true)}
         onOpenSearch={() => setSearchOpen(true)}
+        onToggleSidebar={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+        isSidebarOpen={mobileSidebarOpen}
       />
 
       {/* Main Workspace */}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left Navigation Sidebar */}
+      <div className="flex flex-1 overflow-hidden relative">
+        {/* Navigation Sidebar (Desktop Collapsible & Mobile Slide-Over Drawer) */}
         <Sidebar
           modules={curriculum.modules}
           selectedModuleIndex={selectedModuleIndex}
@@ -153,16 +156,18 @@ export const App: React.FC = () => {
           completedLessons={completedLessons}
           isOpen={sidebarOpen}
           onToggleOpen={() => setSidebarOpen(!sidebarOpen)}
+          isMobileOpen={mobileSidebarOpen}
+          onCloseMobile={() => setMobileSidebarOpen(false)}
         />
 
         {/* Center Content Viewport */}
-        <main className="flex-1 flex flex-col h-full overflow-hidden bg-slate-950/40">
+        <main className="flex-1 flex flex-col h-full overflow-hidden bg-slate-950/40 min-w-0">
           {/* Lesson Header & Mode Switcher Bar */}
-          <div className="px-6 pt-4 pb-3 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur flex-shrink-0">
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-3">
-              <div>
-                <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-sky-400">
-                  <span className="font-bold bg-sky-500/10 border border-sky-500/30 px-2 py-0.5 rounded">
+          <div className="px-3 sm:px-6 pt-3 sm:pt-4 pb-2.5 sm:pb-3 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur flex-shrink-0">
+            <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 mb-2.5 sm:mb-3">
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs font-mono text-sky-400">
+                  <span className="font-bold bg-sky-500/10 border border-sky-500/30 px-2 py-0.5 rounded truncate">
                     MODULE {currentModule.number}: {currentModule.category.toUpperCase()}
                   </span>
                   <span>•</span>
@@ -173,17 +178,17 @@ export const App: React.FC = () => {
                     </span>
                   )}
                 </div>
-                <h1 className="text-lg md:text-2xl font-black text-white tracking-tight mt-1">
+                <h1 className="text-base sm:text-xl md:text-2xl font-black text-white tracking-tight mt-1 leading-snug">
                   {currentLesson.title}
                 </h1>
               </div>
 
               {/* Prev / Next Buttons */}
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1.5 sm:space-x-2 flex-shrink-0">
                 <button
                   onClick={handlePrevLesson}
                   disabled={selectedModuleIndex === 0 && selectedLessonIndex === 0}
-                  className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none"
+                  className="p-1.5 sm:p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none transition-colors"
                   title="Previous Lesson"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -194,7 +199,7 @@ export const App: React.FC = () => {
                     selectedModuleIndex === curriculum.modules.length - 1 &&
                     selectedLessonIndex === currentModule.lessons.length - 1
                   }
-                  className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none"
+                  className="p-1.5 sm:p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white disabled:opacity-30 disabled:pointer-events-none transition-colors"
                   title="Next Lesson"
                 >
                   <ChevronRight className="w-4 h-4" />
@@ -203,90 +208,91 @@ export const App: React.FC = () => {
             </div>
 
             {/* Navigation Mode Tabs + Inline Anchor Shortcuts */}
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-1.5">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 overflow-hidden">
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5 max-w-full">
                 <button
                   onClick={() => setActiveTab('masterclass-flow')}
-                  className={`flex items-center space-x-2 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
+                  className={`flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap flex-shrink-0 ${
                     activeTab === 'masterclass-flow'
                       ? 'bg-gradient-to-r from-sky-500/30 to-indigo-500/30 text-white border border-sky-400/50 glow-cyan'
                       : 'text-slate-400 hover:text-white hover:bg-slate-900'
                   }`}
                 >
-                  <GraduationCap className="w-4 h-4 text-sky-400" />
-                  <span>★ All-in-One Guided Masterclass (Inline 3D + Videos + Code + Quiz)</span>
+                  <GraduationCap className="w-4 h-4 text-sky-400 flex-shrink-0" />
+                  <span className="hidden sm:inline">★ All-in-One Guided Masterclass (Inline 3D + Videos + Code + Quiz)</span>
+                  <span className="sm:hidden">★ All-in-One Masterclass</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('3d-studio')}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all ${
+                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                     activeTab === '3d-studio'
                       ? 'bg-indigo-500/20 text-indigo-300 border border-indigo-500/40'
                       : 'text-slate-400 hover:text-white hover:bg-slate-900'
                   }`}
                 >
-                  <Box className="w-3.5 h-3.5" />
+                  <Box className="w-3.5 h-3.5 flex-shrink-0" />
                   <span>3D &amp; DAG Studio</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('lab-code')}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all ${
+                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                     activeTab === 'lab-code'
                       ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
                       : 'text-slate-400 hover:text-white hover:bg-slate-900'
                   }`}
                 >
-                  <Code2 className="w-3.5 h-3.5" />
+                  <Code2 className="w-3.5 h-3.5 flex-shrink-0" />
                   <span>Code Sandbox</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('media')}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all ${
+                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                     activeTab === 'media'
                       ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40'
                       : 'text-slate-400 hover:text-white hover:bg-slate-900'
                   }`}
                 >
-                  <Tv className="w-3.5 h-3.5" />
+                  <Tv className="w-3.5 h-3.5 flex-shrink-0" />
                   <span>Videos &amp; Papers</span>
                 </button>
 
                 <button
                   onClick={() => setActiveTab('challenge')}
-                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all ${
+                  className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all whitespace-nowrap flex-shrink-0 ${
                     activeTab === 'challenge'
                       ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                       : 'text-slate-400 hover:text-white hover:bg-slate-900'
                   }`}
                 >
-                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
                   <span>Quiz ({currentLesson.interactiveExercise.quizQuestions.length})</span>
                 </button>
               </div>
 
               {/* Quick Section Jumpers when in All-in-One Masterclass Mode */}
               {activeTab === 'masterclass-flow' && (
-                <div className="hidden xl:flex items-center space-x-1.5 text-[11px] font-mono text-slate-400 bg-slate-900/90 px-2.5 py-1 rounded-xl border border-slate-800">
-                  <span className="text-slate-500">Jump to:</span>
-                  <button onClick={() => scrollToSection('inline-theory')} className="hover:text-sky-400 px-1">1.Theory</button>
+                <div className="flex items-center space-x-1 text-[10px] sm:text-[11px] font-mono text-slate-400 bg-slate-900/90 px-2 sm:px-2.5 py-1 rounded-xl border border-slate-800 overflow-x-auto no-scrollbar flex-shrink-0 max-w-full">
+                  <span className="text-slate-500 whitespace-nowrap flex-shrink-0">Jump:</span>
+                  <button onClick={() => scrollToSection('inline-theory')} className="hover:text-sky-400 px-1.5 py-0.5 rounded hover:bg-slate-800 whitespace-nowrap flex-shrink-0">1.Theory</button>
                   <span>·</span>
-                  <button onClick={() => scrollToSection('inline-3d')} className="hover:text-indigo-400 px-1">2.3D/DAG</button>
+                  <button onClick={() => scrollToSection('inline-3d')} className="hover:text-indigo-400 px-1.5 py-0.5 rounded hover:bg-slate-800 whitespace-nowrap flex-shrink-0">2.3D/DAG</button>
                   <span>·</span>
-                  <button onClick={() => scrollToSection('inline-code')} className="hover:text-emerald-400 px-1">3.CodeLab</button>
+                  <button onClick={() => scrollToSection('inline-code')} className="hover:text-emerald-400 px-1.5 py-0.5 rounded hover:bg-slate-800 whitespace-nowrap flex-shrink-0">3.CodeLab</button>
                   <span>·</span>
-                  <button onClick={() => scrollToSection('inline-media')} className="hover:text-rose-400 px-1">4.Videos</button>
+                  <button onClick={() => scrollToSection('inline-media')} className="hover:text-rose-400 px-1.5 py-0.5 rounded hover:bg-slate-800 whitespace-nowrap flex-shrink-0">4.Videos</button>
                   <span>·</span>
-                  <button onClick={() => scrollToSection('inline-quiz')} className="hover:text-amber-400 px-1">5.Quiz</button>
+                  <button onClick={() => scrollToSection('inline-quiz')} className="hover:text-amber-400 px-1.5 py-0.5 rounded hover:bg-slate-800 whitespace-nowrap flex-shrink-0">5.Quiz</button>
                 </div>
               )}
             </div>
           </div>
 
           {/* Scrollable Main Content Viewport */}
-          <div ref={scrollContainerRef} className="flex-1 overflow-y-auto p-6">
-            <div className="max-w-5xl mx-auto pb-24 space-y-12">
+          <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-3 py-4 sm:p-6">
+            <div className="max-w-5xl mx-auto pb-24 space-y-8 sm:space-y-12">
               {/* ===================================================================== */}
               {/* MODE 1: ALL-IN-ONE GUIDED MASTERCLASS (EVERYTHING INLINE SEAMLESSLY!) */}
               {/* ===================================================================== */}
@@ -305,12 +311,12 @@ export const App: React.FC = () => {
                       ))}
                     </div>
 
-                    <div className="bg-gradient-to-r from-sky-950/80 via-indigo-950/80 to-slate-900 border border-sky-500/40 rounded-2xl p-6 shadow-xl">
+                    <div className="bg-gradient-to-r from-sky-950/80 via-indigo-950/80 to-slate-900 border border-sky-500/40 rounded-2xl p-4 sm:p-6 shadow-xl">
                       <div className="flex items-center space-x-2 text-sky-400 font-bold text-xs font-mono uppercase tracking-wider mb-1.5">
-                        <Sparkles className="w-4 h-4" />
+                        <Sparkles className="w-4 h-4 flex-shrink-0" />
                         <span>Instructor's Note — Bridging Your 5+ Years Experience &amp; NUS MTech to 100M Scale</span>
                       </div>
-                      <p className="text-sm text-slate-200 leading-relaxed">
+                      <p className="text-xs sm:text-sm text-slate-200 leading-relaxed">
                         {currentModule.bridgeToYourResume}
                       </p>
                     </div>
@@ -320,17 +326,17 @@ export const App: React.FC = () => {
                   </div>
 
                   {/* 2. Inline Interactive 3D WebGL & 2D DAG Studio */}
-                  <section id="inline-3d" className="space-y-5 pt-4 border-t border-slate-800/80">
+                  <section id="inline-3d" className="space-y-4 sm:space-y-5 pt-4 border-t border-slate-800/80">
                     <div className="flex flex-wrap items-center justify-between gap-3">
-                      <div className="flex items-center space-x-3">
-                        <div className="p-2 rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-400">
+                      <div className="flex items-center space-x-2.5 sm:space-x-3">
+                        <div className="p-2 rounded-xl bg-indigo-500/20 border border-indigo-500/40 text-indigo-400 flex-shrink-0">
                           <Box className="w-5 h-5" />
                         </div>
                         <div>
-                          <span className="text-[11px] font-mono uppercase tracking-wider text-indigo-400 font-bold">
+                          <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-indigo-400 font-bold">
                             Interactive Visual Laboratory • Step 2 of 5
                           </span>
-                          <h2 className="text-xl font-bold text-white">
+                          <h2 className="text-base sm:text-xl font-bold text-white">
                             3D State-Space Simulation &amp; 2D Execution Topology
                           </h2>
                         </div>
@@ -338,17 +344,17 @@ export const App: React.FC = () => {
                       <div className="flex items-center space-x-1 bg-slate-900 p-1 rounded-xl border border-slate-800">
                         <button
                           onClick={() => setStudioView('split')}
-                          className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
+                          className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-mono transition-all ${
                             studioView === 'split'
                               ? 'bg-indigo-600 text-white font-bold'
                               : 'text-slate-400 hover:text-white'
                           }`}
                         >
-                          Stacked 3D + 2D
+                          Stacked
                         </button>
                         <button
                           onClick={() => setStudioView('3d')}
-                          className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
+                          className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-mono transition-all ${
                             studioView === '3d'
                               ? 'bg-indigo-600 text-white font-bold'
                               : 'text-slate-400 hover:text-white'
@@ -358,41 +364,41 @@ export const App: React.FC = () => {
                         </button>
                         <button
                           onClick={() => setStudioView('2d')}
-                          className={`px-3 py-1 rounded-lg text-xs font-mono transition-all ${
+                          className={`px-2.5 sm:px-3 py-1 rounded-lg text-xs font-mono transition-all ${
                             studioView === '2d'
                               ? 'bg-indigo-600 text-white font-bold'
                               : 'text-slate-400 hover:text-white'
                           }`}
                         >
-                          2D DAG Only
+                          2D Only
                         </button>
                       </div>
                     </div>
 
                     {(studioView === 'split' || studioView === '3d') && (
-                      <div className="h-[580px] w-full">
+                      <div className="h-[360px] sm:h-[460px] lg:h-[580px] w-full">
                         <ThreeJsVisualizer spec={currentLesson.visualizations.threeJsSpec} />
                       </div>
                     )}
 
                     {(studioView === 'split' || studioView === '2d') && (
-                      <div className="h-[440px] w-full">
+                      <div className="h-[320px] sm:h-[380px] lg:h-[440px] w-full">
                         <GraphFlowVisualizer spec={currentLesson.visualizations.graphSpec} />
                       </div>
                     )}
                   </section>
 
                   {/* 3. Inline Production Code & Interactive Telemetry Sandbox */}
-                  <section id="inline-code" className="space-y-5 pt-4 border-t border-slate-800/80">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400">
+                  <section id="inline-code" className="space-y-4 sm:space-y-5 pt-4 border-t border-slate-800/80">
+                    <div className="flex items-center space-x-2.5 sm:space-x-3">
+                      <div className="p-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex-shrink-0">
                         <Code2 className="w-5 h-5" />
                       </div>
                       <div>
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-400 font-bold">
+                        <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-emerald-400 font-bold">
                           Hands-On Implementation &amp; Simulator • Step 3 of 5
                         </span>
-                        <h2 className="text-xl font-bold text-white">
+                        <h2 className="text-base sm:text-xl font-bold text-white">
                           Production Code Walkthrough &amp; Live Sandbox Execution
                         </h2>
                       </div>
@@ -401,16 +407,16 @@ export const App: React.FC = () => {
                   </section>
 
                   {/* 4. Inline Architecture Diagrams, YouTube Tech Talks & Landmark Papers */}
-                  <section id="inline-media" className="space-y-5 pt-4 border-t border-slate-800/80">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400">
+                  <section id="inline-media" className="space-y-4 sm:space-y-5 pt-4 border-t border-slate-800/80">
+                    <div className="flex items-center space-x-2.5 sm:space-x-3">
+                      <div className="p-2 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 flex-shrink-0">
                         <Tv className="w-5 h-5" />
                       </div>
                       <div>
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-rose-400 font-bold">
+                        <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-rose-400 font-bold">
                           Curated Blueprints, Lectures &amp; Literature • Step 4 of 5
                         </span>
-                        <h2 className="text-xl font-bold text-white">
+                        <h2 className="text-base sm:text-xl font-bold text-white">
                           SVG Architecture Diagrams, YouTube Talks &amp; Foundational Papers
                         </h2>
                       </div>
@@ -423,16 +429,16 @@ export const App: React.FC = () => {
                   </section>
 
                   {/* 5. Inline Real-World Architecture Challenge & Multi-Question Mastery Quiz */}
-                  <section id="inline-quiz" className="space-y-5 pt-4 border-t border-slate-800/80">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400">
+                  <section id="inline-quiz" className="space-y-4 sm:space-y-5 pt-4 border-t border-slate-800/80">
+                    <div className="flex items-center space-x-2.5 sm:space-x-3">
+                      <div className="p-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 flex-shrink-0">
                         <Award className="w-5 h-5" />
                       </div>
                       <div>
-                        <span className="text-[11px] font-mono uppercase tracking-wider text-amber-400 font-bold">
+                        <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-amber-400 font-bold">
                           Verification &amp; Mastery Checkpoint • Step 5 of 5
                         </span>
-                        <h2 className="text-xl font-bold text-white">
+                        <h2 className="text-base sm:text-xl font-bold text-white">
                           Interactive Architecture Design Challenge &amp; Mastery Quiz
                         </h2>
                       </div>
@@ -453,10 +459,10 @@ export const App: React.FC = () => {
               {/* ===================================================================== */}
               {activeTab === '3d-studio' && (
                 <div className="space-y-6">
-                  <div className="h-[580px] w-full">
+                  <div className="h-[360px] sm:h-[460px] lg:h-[580px] w-full">
                     <ThreeJsVisualizer spec={currentLesson.visualizations.threeJsSpec} />
                   </div>
-                  <div className="h-[440px] w-full">
+                  <div className="h-[320px] sm:h-[380px] lg:h-[440px] w-full">
                     <GraphFlowVisualizer spec={currentLesson.visualizations.graphSpec} />
                   </div>
                 </div>

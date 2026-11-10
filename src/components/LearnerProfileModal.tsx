@@ -20,36 +20,36 @@ export const LearnerProfileModal: React.FC<LearnerProfileModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="relative w-full max-w-4xl max-h-[90vh] bg-slate-950 border border-slate-800 rounded-3xl shadow-2xl flex flex-col overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="relative w-full max-w-4xl max-h-[92vh] bg-slate-950 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 bg-gradient-to-r from-sky-950/80 to-indigo-950/80 border-b border-slate-800">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 font-bold text-lg">
+        <div className="flex items-center justify-between p-4 sm:p-6 bg-gradient-to-r from-sky-950/80 to-indigo-950/80 border-b border-slate-800">
+          <div className="flex items-center space-x-2.5 sm:space-x-3">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-sky-500/20 border border-sky-500/40 flex items-center justify-center text-sky-400 font-bold text-base sm:text-lg flex-shrink-0">
               DB
             </div>
             <div>
-              <div className="flex items-center space-x-2">
-                <h2 className="text-xl font-extrabold text-white">{profile.name}</h2>
-                <span className="text-[10px] font-mono uppercase bg-sky-500/10 text-sky-400 border border-sky-500/30 px-2 py-0.5 rounded-full">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <h2 className="text-base sm:text-xl font-extrabold text-white">{profile.name}</h2>
+                <span className="text-[9px] sm:text-[10px] font-mono uppercase bg-sky-500/10 text-sky-400 border border-sky-500/30 px-2 py-0.5 rounded-full">
                   NUS MTech AI Systems
                 </span>
               </div>
-              <p className="text-xs text-slate-300 font-mono mt-0.5">
-                {profile.currentRole} • {profile.yearsOfExperience} Years Production Experience
+              <p className="text-[11px] sm:text-xs text-slate-300 font-mono mt-0.5">
+                {profile.currentRole} • {profile.yearsOfExperience}y Exp
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 sm:p-2 rounded-xl bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Scrollable Body */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-8">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
           {/* 1. Existing Superpowers & Agentic Transfer */}
           <section className="space-y-4">
             <div className="flex items-center space-x-2 text-sky-400 font-bold text-sm uppercase tracking-wider">

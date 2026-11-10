@@ -20,20 +20,20 @@ export const MediaSection: React.FC<MediaSectionProps> = ({ videos, papers, diag
             <ImageIcon className="w-5 h-5 text-sky-400" />
             <span>Production Architecture Blueprints</span>
           </div>
-          <div className="grid grid-cols-1 gap-6">
+          <div className="grid grid-cols-1 gap-4 sm:gap-6">
             {diagrams.map((diag) => (
               <div
                 key={diag.id}
-                className="bg-slate-900/80 border border-slate-800 rounded-2xl p-5 shadow-xl hover:border-sky-500/40 transition-all"
+                className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3.5 sm:p-5 shadow-xl hover:border-sky-500/40 transition-all"
               >
-                <div className="flex justify-between items-start mb-3">
+                <div className="flex justify-between items-start mb-3 gap-2">
                   <div>
-                    <h4 className="text-sm font-bold text-white tracking-wide">{diag.title}</h4>
-                    <p className="text-xs text-slate-400 mt-1">{diag.caption}</p>
+                    <h4 className="text-xs sm:text-sm font-bold text-white tracking-wide">{diag.title}</h4>
+                    <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5">{diag.caption}</p>
                   </div>
                   <button
                     onClick={() => setSelectedDiagram(diag)}
-                    className="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors"
+                    className="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-colors flex-shrink-0"
                     title="Expand Blueprint"
                   >
                     <Maximize2 className="w-4 h-4" />

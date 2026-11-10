@@ -66,14 +66,14 @@ export const GraphFlowVisualizer: React.FC<GraphFlowVisualizerProps> = ({ spec }
   return (
     <div className="flex flex-col h-full bg-slate-950/90 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
       {/* Top Bar */}
-      <div className="flex flex-wrap items-center justify-between px-5 py-3.5 bg-slate-900/90 border-b border-slate-800 backdrop-blur z-10 gap-3">
-        <div className="flex items-center space-x-3">
+      <div className="flex flex-wrap items-center justify-between px-3 sm:px-5 py-2.5 sm:py-3.5 bg-slate-900/90 border-b border-slate-800 backdrop-blur z-10 gap-2.5">
+        <div className="flex items-center space-x-2.5 sm:space-x-3">
           <div className="p-1.5 rounded-lg bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
             <Activity className="w-4 h-4" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-white tracking-wide">{spec.title}</h3>
-            <p className="text-xs text-slate-400 font-mono">Topology: {spec.graphType}</p>
+            <h3 className="text-xs sm:text-sm font-semibold text-white tracking-wide">{spec.title}</h3>
+            <p className="text-[10px] sm:text-xs text-slate-400 font-mono">Topology: {spec.graphType}</p>
           </div>
         </div>
 
@@ -88,7 +88,8 @@ export const GraphFlowVisualizer: React.FC<GraphFlowVisualizerProps> = ({ spec }
             }`}
           >
             {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-            <span>{isPlaying ? 'Pause Simulation' : 'Simulate Execution'}</span>
+            <span className="hidden sm:inline">{isPlaying ? 'Pause Simulation' : 'Simulate Execution'}</span>
+            <span className="sm:hidden">{isPlaying ? 'Pause' : 'Simulate'}</span>
           </button>
           <button
             onClick={handleReset}
@@ -100,8 +101,13 @@ export const GraphFlowVisualizer: React.FC<GraphFlowVisualizerProps> = ({ spec }
         </div>
       </div>
 
+      {/* Mobile Swipe Hint */}
+      <div className="text-[10px] font-mono text-slate-500 text-center py-1 bg-slate-900/40 sm:hidden">
+        ← Swipe horizontally to inspect DAG nodes →
+      </div>
+
       {/* SVG Canvas */}
-      <div className="relative flex-1 min-h-[400px] w-full overflow-auto p-4 flex items-center justify-center">
+      <div className="relative flex-1 min-h-[260px] sm:min-h-[340px] lg:min-h-[400px] w-full overflow-auto p-2 sm:p-4 flex items-center justify-start sm:justify-center">
         <svg
           viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}
           className="w-full h-auto max-h-[500px]"
@@ -249,7 +255,7 @@ export const GraphFlowVisualizer: React.FC<GraphFlowVisualizerProps> = ({ spec }
 
         {/* Selected Node Details Drawer */}
         {selectedNode && (
-          <div className="absolute bottom-4 right-4 z-20 w-72 bg-slate-900/95 border border-indigo-500/40 rounded-xl p-3.5 shadow-2xl backdrop-blur-md">
+          <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-20 w-[calc(100%-1.5rem)] sm:w-72 max-w-xs bg-slate-900/95 border border-indigo-500/40 rounded-xl p-3 sm:p-3.5 shadow-2xl backdrop-blur-md">
             <div className="flex justify-between items-center mb-1">
               <span className="text-xs font-mono font-bold text-indigo-400 uppercase tracking-wider">
                 {selectedNode.category} Node

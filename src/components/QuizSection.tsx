@@ -47,19 +47,19 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
   return (
     <div className="space-y-8">
       {/* Real-World Scenario Prompt */}
-      <div className="bg-gradient-to-r from-slate-900 to-indigo-950/60 border border-slate-800 rounded-2xl p-6 shadow-xl">
-        <div className="flex items-center space-x-2 text-sky-400 font-bold text-sm uppercase tracking-wider mb-2">
-          <Award className="w-4 h-4" />
+      <div className="bg-gradient-to-r from-slate-900 to-indigo-950/60 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl">
+        <div className="flex items-center space-x-2 text-sky-400 font-bold text-xs sm:text-sm uppercase tracking-wider mb-2">
+          <Award className="w-4 h-4 flex-shrink-0" />
           <span>Real-World Engineering Challenge</span>
         </div>
-        <h3 className="text-xl font-bold text-white mb-2">{exercise.title}</h3>
-        <p className="text-sm text-slate-300 leading-relaxed bg-slate-950/70 p-4 rounded-xl border border-slate-800/80">
+        <h3 className="text-base sm:text-xl font-bold text-white mb-2">{exercise.title}</h3>
+        <p className="text-xs sm:text-sm text-slate-300 leading-relaxed bg-slate-950/70 p-3 sm:p-4 rounded-xl border border-slate-800/80">
           {exercise.prompt}
         </p>
       </div>
 
       {/* Quiz Questions */}
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-6">
         {exercise.quizQuestions.map((q, qIdx) => {
           const isAnswered = submitted[qIdx];
           const chosenOpt = selectedAnswers[qIdx];
@@ -68,7 +68,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
           return (
             <div
               key={qIdx}
-              className={`bg-slate-900/80 border rounded-2xl p-6 shadow-xl transition-all ${
+              className={`bg-slate-900/80 border rounded-2xl p-4 sm:p-6 shadow-xl transition-all ${
                 isAnswered
                   ? isCorrect
                     ? 'border-emerald-500/50 bg-emerald-950/10'
@@ -76,15 +76,15 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                   : 'border-slate-800'
               }`}
             >
-              <div className="flex items-start space-x-3 mb-4">
+              <div className="flex items-start space-x-2.5 sm:space-x-3 mb-3.5">
                 <span className="flex-shrink-0 w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-mono font-bold text-sky-400">
                   {qIdx + 1}
                 </span>
-                <h4 className="text-sm font-semibold text-white leading-relaxed">{q.question}</h4>
+                <h4 className="text-xs sm:text-sm font-semibold text-white leading-relaxed">{q.question}</h4>
               </div>
 
               {/* Options */}
-              <div className="space-y-2.5 ml-9">
+              <div className="space-y-2 ml-0 sm:ml-9">
                 {q.options.map((opt, optIdx) => {
                   let optStyle = 'border-slate-800 bg-slate-950/60 text-slate-300 hover:border-slate-700';
 
@@ -107,9 +107,9 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                       key={optIdx}
                       onClick={() => handleSelect(qIdx, optIdx)}
                       disabled={isAnswered}
-                      className={`w-full text-left p-3.5 rounded-xl border text-xs leading-relaxed transition-all flex items-start space-x-3 ${optStyle}`}
+                      className={`w-full text-left p-3 rounded-xl border text-xs leading-relaxed transition-all flex items-start space-x-2.5 ${optStyle}`}
                     >
-                      <span className="font-mono font-bold text-slate-500">
+                      <span className="font-mono font-bold text-slate-500 flex-shrink-0">
                         {String.fromCharCode(65 + optIdx)}.
                       </span>
                       <span className="flex-1">{opt}</span>
@@ -119,18 +119,18 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
               </div>
 
               {/* Submit or Explanation */}
-              <div className="mt-4 ml-9 flex flex-col space-y-3">
+              <div className="mt-3.5 ml-0 sm:ml-9 flex flex-col space-y-3">
                 {!isAnswered ? (
                   <button
                     onClick={() => handleSubmit(qIdx)}
                     disabled={selectedAnswers[qIdx] === undefined}
-                    className="self-start px-4 py-2 rounded-xl text-xs font-mono font-bold bg-sky-500 text-slate-950 hover:bg-sky-400 disabled:opacity-40 transition-all shadow-lg"
+                    className="self-stretch sm:self-start text-center px-4 py-2.5 sm:py-2 rounded-xl text-xs font-mono font-bold bg-sky-500 text-slate-950 hover:bg-sky-400 disabled:opacity-40 transition-all shadow-lg"
                   >
                     Submit Answer
                   </button>
                 ) : (
                   <div
-                    className={`p-4 rounded-xl border text-xs leading-relaxed ${
+                    className={`p-3.5 sm:p-4 rounded-xl border text-xs leading-relaxed ${
                       isCorrect
                         ? 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
                         : 'bg-rose-950/40 border-rose-500/40 text-rose-200'
@@ -139,12 +139,12 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                     <div className="flex items-center space-x-2 font-bold mb-1">
                       {isCorrect ? (
                         <>
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
                           <span>Correct! Masterful understanding.</span>
                         </>
                       ) : (
                         <>
-                          <XCircle className="w-4 h-4 text-rose-400" />
+                          <XCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
                           <span>Not quite. Check the system mechanics:</span>
                         </>
                       )}
@@ -159,8 +159,8 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
       </div>
 
       {/* Completion & Next Lesson Footer */}
-      <div className="flex flex-wrap items-center justify-between p-6 bg-slate-900 border border-slate-800 rounded-2xl gap-4">
-        <div className="flex items-center space-x-3">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-4 sm:p-6 bg-slate-900 border border-slate-800 rounded-2xl gap-3 sm:gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:space-x-3">
           <button
             onClick={() => {
               onToggleComplete();
@@ -168,7 +168,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
                 confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
               }
             }}
-            className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition-all ${
+            className={`flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold transition-all ${
               isCompleted
                 ? 'bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-lg glow-emerald'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
@@ -177,7 +177,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
             <Check className="w-4 h-4" />
             <span>{isCompleted ? '✓ Lesson Mastered' : 'Mark Lesson as Mastered'}</span>
           </button>
-          <span className="text-xs text-slate-400">
+          <span className="text-[11px] sm:text-xs text-slate-400 text-center sm:text-left">
             {isCompleted ? 'Progress saved locally.' : 'Complete quizzes and review all sections.'}
           </span>
         </div>
@@ -185,7 +185,7 @@ export const QuizSection: React.FC<QuizSectionProps> = ({
         {onNextLesson && (
           <button
             onClick={onNextLesson}
-            className="flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-indigo-500 text-white hover:bg-indigo-400 shadow-lg glow-cyan transition-all"
+            className="flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-indigo-500 text-white hover:bg-indigo-400 shadow-lg glow-cyan transition-all"
           >
             <span>Proceed to Next Lesson</span>
             <ArrowRight className="w-4 h-4" />

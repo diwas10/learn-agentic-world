@@ -149,19 +149,19 @@ Sampling Group of G = 8 Rollouts from Policy π_θ (Qwen-2.5-7B):
   return (
     <div className="flex flex-col bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
       {/* Code Header */}
-      <div className="flex flex-wrap items-center justify-between px-5 py-3.5 bg-slate-900 border-b border-slate-800 gap-3">
-        <div className="flex items-center space-x-3">
+      <div className="flex flex-wrap items-center justify-between px-3 sm:px-5 py-3 bg-slate-900 border-b border-slate-800 gap-2.5">
+        <div className="flex items-center space-x-2.5 sm:space-x-3">
           <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
             <Terminal className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-sm font-bold text-white font-mono">{walkthrough.filename}</span>
-              <span className="text-[10px] font-mono uppercase bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-2 py-0.5 rounded">
-                {walkthrough.language} • Production Reference
+              <span className="text-xs sm:text-sm font-bold text-white font-mono">{walkthrough.filename}</span>
+              <span className="text-[9px] sm:text-[10px] font-mono uppercase bg-emerald-500/10 text-emerald-300 border border-emerald-500/20 px-1.5 sm:px-2 py-0.5 rounded">
+                {walkthrough.language}
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">{walkthrough.description}</p>
+            <p className="text-[11px] sm:text-xs text-slate-400 mt-0.5 line-clamp-1">{walkthrough.description}</p>
           </div>
         </div>
 
@@ -169,24 +169,25 @@ Sampling Group of G = 8 Rollouts from Policy π_θ (Qwen-2.5-7B):
           <button
             onClick={handleRunSimulation}
             disabled={isSimulating}
-            className="flex items-center space-x-1.5 px-3.5 py-2 rounded-xl text-xs font-mono font-bold bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition-all shadow-lg disabled:opacity-50"
+            className="flex items-center space-x-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-mono font-bold bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition-all shadow-lg disabled:opacity-50"
           >
             <Cpu className="w-3.5 h-3.5" />
-            <span>{isSimulating ? 'Running Sandbox...' : '▶ Run Live Telemetry Simulation'}</span>
+            <span className="hidden sm:inline">{isSimulating ? 'Running Sandbox...' : '▶ Run Live Telemetry Simulation'}</span>
+            <span className="sm:hidden">{isSimulating ? 'Running...' : '▶ Run Sim'}</span>
           </button>
           <button
             onClick={handleCopy}
-            className="flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-mono font-medium bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors"
+            className="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl text-xs font-mono font-medium bg-slate-800 text-slate-300 hover:text-white transition-colors"
           >
             {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-            <span>{copied ? 'Copied!' : 'Copy'}</span>
+            <span className="hidden xs:inline">{copied ? 'Copied!' : 'Copy'}</span>
           </button>
         </div>
       </div>
 
       {/* Optional Interactive Lab Parameter Sliders for Math Simulations */}
       {(showKvControls || showSpecControls) && (
-        <div className="px-5 py-3 bg-slate-900/60 border-b border-slate-800/80 flex flex-wrap items-center gap-6 text-xs">
+        <div className="px-3 sm:px-5 py-2.5 sm:py-3 bg-slate-900/60 border-b border-slate-800/80 flex flex-wrap items-center gap-3 sm:gap-6 text-xs">
           <div className="flex items-center space-x-1.5 text-sky-400 font-mono font-bold">
             <Sliders className="w-3.5 h-3.5" />
             <span>Interactive Lab Inputs:</span>
@@ -272,12 +273,12 @@ Sampling Group of G = 8 Rollouts from Policy π_θ (Qwen-2.5-7B):
       )}
 
       {/* Code Block */}
-      <div className="max-h-[540px] overflow-auto p-4 bg-slate-950 font-mono text-xs text-slate-200 leading-relaxed">
+      <div className="max-h-[420px] sm:max-h-[540px] overflow-auto p-2.5 sm:p-4 bg-slate-950 font-mono text-[11px] sm:text-xs text-slate-200 leading-relaxed">
         <pre className="overflow-x-auto">
           <code>
             {walkthrough.code.split('\n').map((line, idx) => (
               <div key={idx} className="table-row hover:bg-slate-900/70 transition-colors">
-                <span className="table-cell select-none text-right pr-4 text-slate-600 font-mono text-[11px] w-10">
+                <span className="table-cell select-none text-right pr-2 sm:pr-4 text-slate-600 font-mono text-[10px] sm:text-[11px] w-8 sm:w-10">
                   {idx + 1}
                 </span>
                 <span className="table-cell whitespace-pre">{line}</span>

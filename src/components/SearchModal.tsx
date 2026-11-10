@@ -66,18 +66,18 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-150">
       <div className="relative w-full max-w-2xl bg-slate-950 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Input Bar */}
-        <div className="flex items-center px-4 py-3.5 bg-slate-900 border-b border-slate-800 gap-3">
-          <Search className="w-5 h-5 text-sky-400 flex-shrink-0" />
+        <div className="flex items-center px-3 sm:px-4 py-3 sm:py-3.5 bg-slate-900 border-b border-slate-800 gap-2.5 sm:gap-3">
+          <Search className="w-4 h-4 sm:w-5 sm:h-5 text-sky-400 flex-shrink-0" />
           <input
             type="text"
-            placeholder="Search concepts (e.g. RadixAttention, ReWOO, GRPO, Temporal, KV-Cache)..."
+            placeholder="Search concepts (e.g. RadixAttention, ReWOO, GRPO, Temporal)..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoFocus
-            className="w-full bg-transparent text-sm text-white placeholder-slate-500 focus:outline-none font-mono"
+            className="w-full bg-transparent text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none font-mono"
           />
           <button onClick={onClose} className="p-1 rounded text-slate-400 hover:text-white">
             <X className="w-4 h-4" />
