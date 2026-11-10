@@ -1,24 +1,19 @@
 declare module 'katex/dist/contrib/auto-render.mjs' {
-  interface RenderMathInElementOptions {
-    delimiters?: Array<{
-      left: string;
-      right: string;
-      display: boolean;
-    }>;
+  export interface AutoRenderDelimiter {
+    left: string;
+    right: string;
+    display: boolean;
+  }
+
+  export interface AutoRenderOptions {
+    delimiters?: AutoRenderDelimiter[];
     ignoredTags?: string[];
     ignoredClasses?: string[];
-    errorCallback?: (msg: string, err: any) => void;
+    errorCallback?: (msg: string, err: unknown) => void;
     preProcess?: (math: string) => string;
     throwOnError?: boolean;
     errorColor?: string;
-    macros?: Record<string, any>;
-    colorIsTextColor?: boolean;
-    maxSize?: number;
-    maxExpand?: number;
-    strict?: boolean | string | ((errorCode: string, errorMsg: string, token: any) => string | boolean);
-    trust?: boolean | ((context: any) => boolean);
   }
 
-  function renderMathInElement(elem: HTMLElement, options?: RenderMathInElementOptions): void;
-  export default renderMathInElement;
+  export default function renderMathInElement(elem: HTMLElement, options?: AutoRenderOptions): void;
 }

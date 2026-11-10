@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import renderMathInElement from 'katex/dist/contrib/auto-render.mjs';
+import 'katex/dist/katex.min.css';
 
 interface MathHtmlRendererProps {
   htmlContent: string;
@@ -19,6 +20,8 @@ export const MathHtmlRenderer: React.FC<MathHtmlRendererProps> = ({ htmlContent,
             { left: '\\[', right: '\\]', display: true },
             { left: '\\(', right: '\\)', display: false },
           ],
+          ignoredTags: ['script', 'noscript', 'style', 'textarea'],
+          ignoredClasses: [],
           throwOnError: false,
         });
       } catch (e) {
