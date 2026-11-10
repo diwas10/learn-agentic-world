@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050B17"/>
+      <stop offset="50%" stop-color="#0A1224"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+
+    <!-- Outer Rim Stroke Gradient -->
+    <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="45%" stop-color="#6366F1"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </linearGradient>
+
+    <!-- Flame / Core Gradient -->
+    <linearGradient id="flameGrad" x1="20%" y1="100%" x2="80%" y2="0%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="35%" stop-color="#0284C7"/>
+      <stop offset="70%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#F43F5E"/>
+    </linearGradient>
+
+    <!-- Inner Core Bright Gradient -->
+    <linearGradient id="coreGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="60%" stop-color="#BAE6FD"/>
+      <stop offset="100%" stop-color="#FFFFFF"/>
+    </linearGradient>
+
+    <!-- Ambient Core Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <radialGradient id="radialGlow" cx="50%" cy="55%" r="50%">
+      <stop offset="0%" stop-color="#0284C7" stop-opacity="0.45"/>
+      <stop offset="60%" stop-color="#6366F1" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Base Squircle -->
+  <rect x="24" y="24" width="464" height="464" rx="116" ry="116" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle Internal Radial Glow -->
+  <circle cx="256" cy="270" r="190" fill="url(#radialGlow)"/>
+
+  <!-- Glowing Border Rim -->
+  <rect x="24" y="24" width="464" height="464" rx="116" ry="116" fill="none" stroke="url(#rimGrad)" stroke-width="18" stroke-opacity="0.95"/>
+
+  <!-- Ambient Shadow for Central Flame -->
+  <g filter="url(#glow)">
+    <!-- Stylized Agentic Flame Outer Silhouette -->
+    <path d="M 256 92
+             C 285 140, 310 185, 310 230
+             C 310 248, 303 268, 290 282
+             C 278 295, 260 300, 248 300
+             C 285 270, 275 220, 252 188
+             C 235 225, 205 270, 205 315
+             C 205 365, 240 405, 290 405
+             C 355 405, 395 345, 395 275
+             C 395 220, 365 175, 345 150
+             C 350 178, 346 205, 335 222
+             C 328 175, 298 125, 256 92 Z"
+          fill="url(#flameGrad)"
+          opacity="0.4"/>
+  </g>
+
+  <!-- Main Agentic Flame & Kinetic Cognitive Core -->
+  <g id="main-symbol">
+    <!-- Primary Outer Flame Body -->
+    <path d="M 256 88
+             C 286 138, 315 185, 315 232
+             C 315 252, 308 270, 295 284
+             C 282 297, 264 302, 250 302
+             C 288 272, 278 222, 255 188
+             C 238 226, 205 272, 205 318
+             C 205 370, 242 412, 294 412
+             C 362 412, 404 350, 404 276
+             C 404 218, 372 170, 350 144
+             C 356 174, 352 204, 340 222
+             C 332 174, 300 122, 256 88 Z"
+          fill="url(#flameGrad)"/>
+
+    <!-- Left Wing Flare (Balance and Dynamic Motion) -->
+    <path d="M 205 318
+             C 175 305, 148 275, 148 235
+             C 148 200, 168 172, 185 152
+             C 180 176, 185 198, 196 214
+             C 205 228, 218 240, 228 252
+             C 214 270, 205 292, 205 318 Z"
+          fill="#38BDF8"
+          opacity="0.9"/>
+
+    <!-- Inner Hot Core Flame -->
+    <path d="M 268 225
+             C 285 250, 295 275, 295 305
+             C 295 342, 270 372, 238 372
+             C 220 372, 205 360, 205 342
+             C 205 320, 222 298, 238 280
+             C 248 268, 256 250, 260 236
+             C 264 231, 266 228, 268 225 Z"
+          fill="url(#coreGrad)"/>
+
+    <!-- Center Neural Spark (Hyper-Bright Focus Point) -->
+    <ellipse cx="258" cy="305" rx="14" ry="24" transform="rotate(-15 258 305)" fill="#FFFFFF" opacity="0.95"/>
+    <circle cx="256" cy="308" r="7" fill="#BAE6FD"/>
+
+    <!-- Planetary Scale Cognitive Orbit Satellites -->
+    <circle cx="132" cy="132" r="14" fill="#38BDF8"/>
+    <circle cx="132" cy="132" r="22" fill="none" stroke="#38BDF8" stroke-width="3" stroke-dasharray="4 4" opacity="0.75"/>
+
+    <circle cx="390" cy="385" r="16" fill="#818CF8"/>
+    <circle cx="390" cy="385" r="25" fill="none" stroke="#818CF8" stroke-width="3" stroke-dasharray="4 4" opacity="0.75"/>
+
+    <circle cx="388" cy="120" r="10" fill="#34D399"/>
+  </g>
+</svg>
